@@ -14,7 +14,7 @@ pip install -r requirements.txt
 ## Usage
 
 Make sure to provide your own account sid, authentication token and twilio sender number from your Twilio profile.
-To send a message pass a string to SmsGate.send_sms(string).
+To send a message pass a string to SmsSender send_sms function.
 
 ## License
 
