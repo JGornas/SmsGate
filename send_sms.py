@@ -1,5 +1,6 @@
 from twilio.rest import Client
 from AUTH import ACCOUNT_SID, AUTH_TOKEN, SENDER_NUMBER, RECIVER_NUMBER
+import argparse
 import logging
 
 
@@ -27,6 +28,16 @@ class SmsSender(Logger):
         print(content.sid)
 
 
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('message')
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = parse_arguments()
+
     s = SmsSender()
-    s.send_sms("Witaj podróżniku! Text example in unicode.")
+    s.send_sms(args.message)
+
+    print(f"'{args.message}' - Message sent successfully.")
