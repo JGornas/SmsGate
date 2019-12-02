@@ -1,7 +1,8 @@
 # SmsGate
 
-SmsGate is a Python application used for remote sms sending.
-Uses Twilio provider.
+SmsGate - Python application for sms automatic distribution.
+Uses Twilio provider. Login credentials for Twilio account are required.
+Free subscription requires both sender and receiver numbers to be confirmed in settings page on their website.
 
 ## Installation
 
@@ -11,10 +12,15 @@ Use the package manager pip to install required libraries.
 pip install -r requirements.txt
 ```
 
+Fill the fields in send_sms.py file:
+ account_sid, auth_token. Set a default sender - receiver 
+numbers.
+
 ## Usage
 
-Make sure to provide your own account sid, authentication token and twilio sender number from your Twilio profile.
-To send a message pass a string to SmsSender send_sms function.
+```bash
+python send_sms.py "message" [-s] [--sender] [-r] [--receiver]
+```
 
 ## License
 
