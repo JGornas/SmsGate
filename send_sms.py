@@ -15,7 +15,7 @@ class Logger:
 
 
 class SmsSender(Logger):
-    def __init__(self, account_sid=os.getenv("ACCOUNYT_SID"), auth_token=os.getenv("AUTH_TOKEN")):
+    def __init__(self, account_sid=os.getenv("ACCOUNT_SID"), auth_token=os.getenv("AUTH_TOKEN")):
         super().__init__()
         self.client = Client(account_sid, auth_token)
 
