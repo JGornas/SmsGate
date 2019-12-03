@@ -1,12 +1,12 @@
+import os
 import argparse
 import logging
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
-from AUTH import ACCOUNT_SID, AUTH_TOKEN, SENDER_NUMBER, RECEIVER_NUMBER
 
 
 class Logger:
-    def __init__(self, level=logging.DEBUG, filename="smsgate.log", mode="a", encoding="utf-8"):
+    def __init__(self, level=logging.INFO, filename="smsgate.log", mode="a", encoding="utf-8"):
         self.root_logger = logging.getLogger()
         self.root_logger.setLevel(level)
         handler = logging.FileHandler(filename, mode, encoding)
@@ -15,12 +15,11 @@ class Logger:
 
 
 class SmsSender(Logger):
-    def __init__(self, account_sid=ACCOUNT_SID, auth_token=AUTH_TOKEN):
+    def __init__(self, account_sid=os.getenv("ACCOUNT_SID"), auth_token=os.getenv("AUTH_TOKEN")):
         super().__init__()
         self.client = Client(account_sid, auth_token)
 
     def send_sms(self, text, sender_number, receiver_number):
-        self.root_logger.info(f"SMS MESSAGE: {text}")
         content = self.client.messages.create(
                                               body=text,
                                               from_=sender_number,
@@ -32,8 +31,10 @@ class SmsSender(Logger):
 def parse_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("message", help="message content")
-    parser.add_argument("-s", "--sender", type=int, help="custom sender number", default=SENDER_NUMBER)
-    parser.add_argument("-r", "--reciever", type=int, help="custom receiver number", default=RECEIVER_NUMBER)
+    parser.add_argument("-s", "--sender", help="custom sender number",
+                        type=int, default=os.getenv("SENDER_NUMBER"))
+    parser.add_argument("-r", "--receiver", help="custom receiver number",
+                        type=int, default=os.getenv("RECEIVER_NUMBER"))
     return parser.parse_args()
 
 
@@ -42,7 +43,7 @@ if __name__ == "__main__":
 
     s = SmsSender()
     try:
-        s.send_sms(args.message, args.sender, args.reciever)
-        print(f"'{args.message}' - Message sent successfully from +{args.sender} to +{args.reciever}.")
+        s.send_sms(args.message, args.sender, args.receiver)
+        print(f"'{args.message}' - Message sent successfully from +{args.sender} to +{args.receiver}.")
     except TwilioRestException:
         print("Unable to send message. Invalid phone number.")
