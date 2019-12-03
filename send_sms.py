@@ -2,7 +2,7 @@ import os
 import argparse
 import logging
 from twilio.rest import Client
-from twilio.base.exceptions import TwilioRestException
+from twilio.base.exceptions import TwilioRestException, TwilioException
 
 
 class Logger:
@@ -15,7 +15,7 @@ class Logger:
 
 
 class SmsSender(Logger):
-    def __init__(self, account_sid=os.getenv("ACCOUNT_SID"), auth_token=os.getenv("AUTH_TOKEN")):
+    def __init__(self, account_sid=os.getenv("ACCOUNYT_SID"), auth_token=os.getenv("AUTH_TOKEN")):
         super().__init__()
         self.client = Client(account_sid, auth_token)
 
@@ -40,10 +40,11 @@ def parse_arguments():
 
 if __name__ == "__main__":
     args = parse_arguments()
-
-    s = SmsSender()
     try:
+        s = SmsSender()
         s.send_sms(args.message, args.sender, args.receiver)
         print(f"'{args.message}' - Message sent successfully from +{args.sender} to +{args.receiver}.")
     except TwilioRestException:
         print("Unable to send message. Invalid phone number.")
+    except TwilioException:
+        print("Unable to send message. Invalid credentials.")
