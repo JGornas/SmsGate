@@ -20,11 +20,9 @@ class SmsSender(Logger):
         self.client = Client(account_sid, auth_token)
 
     def send_sms(self, text, sender_number, receiver_number):
-        content = self.client.messages.create(
-                                              body=text,
+        content = self.client.messages.create(body=text,
                                               from_=sender_number,
-                                              to=receiver_number
-                                             )
+                                              to=receiver_number)
         print(content.date_updated, content.sid)
 
 
